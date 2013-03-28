@@ -1,0 +1,261 @@
+#
+# Conditional build:
+%bcond_without	static_libs	# don't build static libraries
+%bcond_without	fltk		# FLTK GUI tools (oyranos-config-fltk)
+%bcond_without	qt		# Qt GUI tools (qscmevents)
+#
+Summary:	Colour Management System on operating system level
+Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
+Name:		oyranos
+Version:	0.9.4
+Release:	1
+License:	BSD
+Group:		Applications/Graphics
+Source0:	http://downloads.sourceforge.net/oyranos/%{name}-%{version}.tar.bz2
+# Source0-md5:	582ea87d82a42912ddc45937e4f864b4
+URL:		http://www.oyranos.org/
+BuildRequires:	cmake >= 2.6.4
+BuildRequires:	cairo-devel
+BuildRequires:	cups-devel
+BuildRequires:	doxygen
+BuildRequires:	elektra-devel >= 0.7
+BuildRequires:	exiv2-devel
+%{?with_fltk:BuildRequires:	fltk-devel}
+BuildRequires:	gcc >= 6:4.2
+BuildRequires:	gettext-devel
+#BuildRequires:	grantlee
+BuildRequires:	lcms-devel
+BuildRequires:	lcms2-devel
+BuildRequires:	libXcm-devel
+BuildRequires:	libgomp-devel
+BuildRequires:	libltdl-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libraw-devel
+BuildRequires:	libxml2-devel >= 2
+BuildRequires:	pkgconfig
+BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	xorg-lib-libXfixes-devel
+BuildRequires:	xorg-lib-libXinerama-devel
+BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xorg-lib-libXxf86vm-devel
+BuildRequires:	yajl-devel
+%if %{with qt}
+BuildRequires:	QtCore-devel >= 4
+BuildRequires:	QtGui-devel >= 4
+BuildRequires:	qt4-build >= 4
+%endif
+Requires:	%{name}-libs = %{version}-%{release}
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%description
+Oyranos is a Colour Management System (CMS) on operating system level.
+It allows to match predictably input device colours to output device
+colours across supporting applications. One goal is to make colour
+management useful for all users in a automated fashion and regardless
+of any technical knowledge.
+
+%description -l pl.UTF-8
+Oyranos to system zarządzania kolorami (CMS - Colour Management
+System) na poziomie systemu operacyjnego. Pozwala na przewidywalne
+powiązanie kolorów urządzeń wejściowych z kolorami urządzeń
+wyjściowych poprzez wszystkie aplikacje obsługujące ten system. Celem
+jest uprzystępnienie zarządzania kolorami dla wszystkich użytkowników
+w sposób zautomatyzowany, niezależny od wiedzy technicznej.
+
+%package fltk
+Summary:	FLTK-based GUI for Oyranos Colour Management System
+Summary(pl.UTF-8):	Oparty na FLTK graficzny interfejs dla systemu zarządzania kolorami Oyranos
+Group:		X11/Applications/Graphics
+Requires:	%{name} = %{version}-%{release}
+
+%description fltk
+FLTK-based configuration GUI for Oyranos Colour Management System.
+
+%description fltk -l pl.UTF-8
+Oparty na FLTK graficzny interfejs konfiguracyjny do systemu
+zarządzania kolorami Oyranos.
+
+%package qt
+Summary:	Qt-based GUI for Oyranos Colour Management System
+Summary(pl.UTF-8):	Oparty na Qt graficzny interfejs dla systemu zarządzania kolorami Oyranos
+Group:		X11/Applications/Graphics
+Requires:	%{name} = %{version}-%{release}
+
+%description qt
+Qt-based applet showing state of Oyranos Colour Management System.
+
+%description qt -l pl.UTF-8
+Oparty na Qt aplet pokazyjący stan systemu zarządzania kolorami
+Oyranos.
+
+%package libs
+Summary:	Oyranos Colour Management System libraries
+Summary(pl.UTF-8):	Biblioteki systemu zarządzania kolorami Oyranos
+Group:		Libraries
+Requires:	elektra-libs >= 0.7
+
+%description libs
+Oyranos Colour Management System libraries.
+
+%description libs -l pl.UTF-8
+Biblioteki systemu zarządzania kolorami Oyranos.
+
+%package devel
+Summary:	Header files for oyranos libraries
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek oyranos
+Group:		Development/Libraries
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description devel
+Header files for oyranos libraries.
+
+%description devel -l pl.UTF-8
+Pliki nagłówkowe bibliotek oyranos.
+
+%package static
+Summary:	Static oyranos libraries
+Summary(pl.UTF-8):	Statyczne biblioteki oyranos
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static oyranos libraries.
+
+%description static -l pl.UTF-8
+Statyczne biblioteki oyranos.
+
+%package apidocs
+Summary:	Oyranos API documentation
+Summary(pl.UTF-8):	Dokumentacja API bibliotek Oyranos
+Group:		Documentation
+
+%description apidocs
+Oyranos API documentation.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API bibliotek Oyranos.
+
+%prep
+%setup -q
+
+%build
+install -d build
+cd build
+%cmake ..
+
+%{__make}
+
+%install
+rm -rf $RPM_BUILD_ROOT
+
+%{__make} -C build install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+# packaged as %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/oyranos/html
+
+%find_lang %{name}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
+
+%files -f %{name}.lang
+%defattr(644,root,root,755)
+%doc AUTHORS COPYING ChangeLog README
+%attr(755,root,root) %{_bindir}/oyranos-icc
+%attr(755,root,root) %{_bindir}/oyranos-monitor
+%attr(755,root,root) %{_bindir}/oyranos-monitor-daemon
+%attr(755,root,root) %{_bindir}/oyranos-policy
+%attr(755,root,root) %{_bindir}/oyranos-profile
+%attr(755,root,root) %{_bindir}/oyranos-profile-graph
+%attr(755,root,root) %{_bindir}/oyranos-profile-install
+%attr(755,root,root) %{_bindir}/oyranos-profiles
+%attr(755,root,root) %{_bindir}/oyranos-xforms-modules
+%dir %{_libdir}/colour
+%dir %{_libdir}/colour/modules
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_CUPS_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcm2_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcms_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lraw_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oPNG_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oicc_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyRE_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyX1_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oydi_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyra_cmm_module.so
+%dir %{_libdir}/oyranos
+%attr(755,root,root) %{_libdir}/oyranos/liboyranos_oyIM_cmm_module.so
+%dir %{_datadir}/color/settings
+%{_datadir}/color/settings/*.policy.xml
+/etc/xdg/autostart/oyranos-monitor-setup.desktop
+%{_desktopdir}/oyranos-profile-install.desktop
+%{_pixmapsdir}/lcms_logo2.png
+%{_pixmapsdir}/oyranos_logo.png
+%{_mandir}/man1/oyranos-monitor.1*
+%{_mandir}/man1/oyranos-monitor-daemon.1*
+%{_mandir}/man1/oyranos-policy.1*
+%{_mandir}/man1/oyranos-profile.1*
+%{_mandir}/man1/oyranos-profile-graph.1*
+%{_mandir}/man1/oyranos-profile-install.1*
+%{_mandir}/man1/oyranos-profiles.1*
+%{_mandir}/man1/oyranos-xforms-modules.1*
+
+%if %{with fltk}
+%files fltk
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/oyranos-config-fltk
+%{_mandir}/man1/oyranos-config-fltk.1*
+%endif
+
+%if %{with qt}
+%files qt
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/qcmsevents
+%{_desktopdir}/qcmsevents-applet.desktop
+%{_pixmapsdir}/qcmsevents.svg
+%{_mandir}/man1/qcmsevents.1*
+%endif
+
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/liboyranos.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liboyranos.so.0
+%attr(755,root,root) %{_libdir}/liboyranos_config.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liboyranos_config.so.0
+%attr(755,root,root) %{_libdir}/liboyranos_core.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liboyranos_core.so.0
+%attr(755,root,root) %{_libdir}/liboyranos_modules.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liboyranos_modules.so.0
+%attr(755,root,root) %{_libdir}/liboyranos_object.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liboyranos_object.so.0
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/oyranos-config
+%attr(755,root,root) %{_libdir}/liboyranos.so
+%attr(755,root,root) %{_libdir}/liboyranos_config.so
+%attr(755,root,root) %{_libdir}/liboyranos_core.so
+%attr(755,root,root) %{_libdir}/liboyranos_modules.so
+%attr(755,root,root) %{_libdir}/liboyranos_object.so
+%{_libdir}/oyranos/cmake
+%{_includedir}/oyranos
+%{_pkgconfigdir}/oyranos.pc
+%{_mandir}/man3/oyranos-config.3*
+%{_mandir}/man3/oyranos.3*
+
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/liboyranos-static.a
+%{_libdir}/liboyranos_config-static.a
+%{_libdir}/liboyranos_core-static.a
+%{_libdir}/liboyranos_modules-static.a
+%{_libdir}/liboyranos_object-static.a
+%endif
+
+%files apidocs
+%defattr(644,root,root,755)
+%doc build/doc/html/*.{css,html,js,png}
