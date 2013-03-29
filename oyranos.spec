@@ -23,7 +23,8 @@ BuildRequires:	exiv2-devel
 %{?with_fltk:BuildRequires:	fltk-devel}
 BuildRequires:	gcc >= 6:4.2
 BuildRequires:	gettext-devel
-#BuildRequires:	grantlee
+# not required for releases (generated code included)
+#BuildRequires:	grantlee >= 0.2.0
 BuildRequires:	lcms-devel
 BuildRequires:	lcms2-devel
 BuildRequires:	libXcm-devel
@@ -62,29 +63,66 @@ wyjściowych poprzez wszystkie aplikacje obsługujące ten system. Celem
 jest uprzystępnienie zarządzania kolorami dla wszystkich użytkowników
 w sposób zautomatyzowany, niezależny od wiedzy technicznej.
 
-%package fltk
+%package module-cups
+Summary:	CUPS device support for Oyranos Colour Management System
+Summary(pl.UTF-8):	Obsługa urządzeń CUPS dla systemu zarządzania kolorami Oyranos
+Group:		Applications/Graphics
+Requires:	%{name} = %{version}-%{release}
+
+%description module-cups
+CUPS device support for Oyranos Colour Management System.
+
+%description module-cups -l pl.UTF-8
+Obsługa urządzeń CUPS dla systemu zarządzania kolorami Oyranos.
+
+%package module-x11
+Summary:	X11 and monitor support for Oyranos Colour Management System
+Summary(pl.UTF-8):	Obsługa X11 i monitorów dla systemu zarządzania kolorami Oyranos
+Group:		X11/Applications/Graphics
+Requires:	%{name} = %{version}-%{release}
+
+%description module-x11
+X11 and monitor support for Oyranos Colour Management System.
+
+%description module-x11 -l pl.UTF-8
+Obsługa X11 i monitorów dla systemu zarządzania kolorami Oyranos.
+
+%package profile-graph
+Summary:	Profile 2D graph tool
+Summary(pl.UTF-8):	Narzędzie do rysowania dwuwymiarowych wykresów profili
+Group:		Applications/Graphics
+Requires:	%{name} = %{version}-%{release}
+
+%description profile-graph
+The grapher renders a simple gamut hull of a ICC profile in 2D.
+
+%description profile-graph -l pl.UTF-8
+Program rysujący w dwóch wymiarach prosty obraz gamy kolorów z profilu
+ICC.
+
+%package ui-fltk
 Summary:	FLTK-based GUI for Oyranos Colour Management System
 Summary(pl.UTF-8):	Oparty na FLTK graficzny interfejs dla systemu zarządzania kolorami Oyranos
 Group:		X11/Applications/Graphics
 Requires:	%{name} = %{version}-%{release}
 
-%description fltk
+%description ui-fltk
 FLTK-based configuration GUI for Oyranos Colour Management System.
 
-%description fltk -l pl.UTF-8
+%description ui-fltk -l pl.UTF-8
 Oparty na FLTK graficzny interfejs konfiguracyjny do systemu
 zarządzania kolorami Oyranos.
 
-%package qt
+%package ui-qt
 Summary:	Qt-based GUI for Oyranos Colour Management System
 Summary(pl.UTF-8):	Oparty na Qt graficzny interfejs dla systemu zarządzania kolorami Oyranos
 Group:		X11/Applications/Graphics
 Requires:	%{name} = %{version}-%{release}
 
-%description qt
+%description ui-qt
 Qt-based applet showing state of Oyranos Colour Management System.
 
-%description qt -l pl.UTF-8
+%description ui-qt -l pl.UTF-8
 Oparty na Qt aplet pokazyjący stan systemu zarządzania kolorami
 Oyranos.
 
@@ -166,52 +204,61 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog README
 %attr(755,root,root) %{_bindir}/oyranos-icc
-%attr(755,root,root) %{_bindir}/oyranos-monitor
-%attr(755,root,root) %{_bindir}/oyranos-monitor-daemon
 %attr(755,root,root) %{_bindir}/oyranos-policy
 %attr(755,root,root) %{_bindir}/oyranos-profile
-%attr(755,root,root) %{_bindir}/oyranos-profile-graph
 %attr(755,root,root) %{_bindir}/oyranos-profile-install
 %attr(755,root,root) %{_bindir}/oyranos-profiles
 %attr(755,root,root) %{_bindir}/oyranos-xforms-modules
 %dir %{_libdir}/colour
 %dir %{_libdir}/colour/modules
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_CUPS_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcm2_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcms_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lraw_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oPNG_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oicc_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyRE_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyX1_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oydi_cmm_module.so
 %attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyra_cmm_module.so
 %dir %{_libdir}/oyranos
 %attr(755,root,root) %{_libdir}/oyranos/liboyranos_oyIM_cmm_module.so
 %dir %{_datadir}/color/settings
 %{_datadir}/color/settings/*.policy.xml
-/etc/xdg/autostart/oyranos-monitor-setup.desktop
 %{_desktopdir}/oyranos-profile-install.desktop
 %{_pixmapsdir}/lcms_logo2.png
 %{_pixmapsdir}/oyranos_logo.png
-%{_mandir}/man1/oyranos-monitor.1*
-%{_mandir}/man1/oyranos-monitor-daemon.1*
 %{_mandir}/man1/oyranos-policy.1*
 %{_mandir}/man1/oyranos-profile.1*
-%{_mandir}/man1/oyranos-profile-graph.1*
 %{_mandir}/man1/oyranos-profile-install.1*
 %{_mandir}/man1/oyranos-profiles.1*
 %{_mandir}/man1/oyranos-xforms-modules.1*
 
+%files module-cups
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_CUPS_cmm_module.so
+
+%files module-x11
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/oyranos-monitor
+%attr(755,root,root) %{_bindir}/oyranos-monitor-daemon
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyX1_cmm_module.so
+%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oydi_cmm_module.so
+/etc/xdg/autostart/oyranos-monitor-setup.desktop
+%{_mandir}/man1/oyranos-monitor.1*
+%{_mandir}/man1/oyranos-monitor-daemon.1*
+
+%files profile-graph
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/oyranos-profile-graph
+%{_mandir}/man1/oyranos-profile-graph.1*
+
 %if %{with fltk}
-%files fltk
+%files ui-fltk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/oyranos-config-fltk
 %{_mandir}/man1/oyranos-config-fltk.1*
 %endif
 
 %if %{with qt}
-%files qt
+%files ui-qt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/qcmsevents
 %{_desktopdir}/qcmsevents-applet.desktop
