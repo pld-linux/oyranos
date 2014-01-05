@@ -8,11 +8,12 @@ Summary:	Colour Management System on operating system level
 Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
 Name:		oyranos
 Version:	0.9.4
-Release:	2
+Release:	3
 License:	BSD
 Group:		Applications/Graphics
 Source0:	http://downloads.sourceforge.net/oyranos/%{name}-%{version}.tar.bz2
 # Source0-md5:	582ea87d82a42912ddc45937e4f864b4
+Patch0:		no-mesa10.patch
 URL:		http://www.oyranos.org/
 BuildRequires:	cmake >= 2.6.4
 BuildRequires:	cairo-devel
@@ -20,7 +21,10 @@ BuildRequires:	cups-devel
 BuildRequires:	doxygen
 BuildRequires:	elektra-devel >= 0.7
 BuildRequires:	exiv2-devel
-%{?with_fltk:BuildRequires:	fltk-devel}
+%if %{with fltk}
+BuildRequires:	fltk-devel
+BuildRequires:	fltk-gl-devel
+%endif
 BuildRequires:	gcc >= 6:4.2
 BuildRequires:	gettext-devel
 # not required for releases (generated code included)
@@ -175,6 +179,7 @@ Dokumentacja API bibliotek Oyranos.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 install -d build

@@ -1,0 +1,16 @@
+--- oyranos-0.9.4/src/examples/CMakeLists.txt~	2013-01-19 11:14:14.000000000 +0100
++++ oyranos-0.9.4/src/examples/CMakeLists.txt	2014-01-05 16:44:48.459743318 +0100
+@@ -44,13 +44,6 @@
+ 
+ # simple image viewer
+ IF( FLTK_FOUND )
+-  ADD_EXECUTABLE( image-display 
+-                  "${CMAKE_CURRENT_SOURCE_DIR}/image_display/image_display.cpp"
+-                  "${CMAKE_CURRENT_SOURCE_DIR}/image_display/GLee.c"
+-                )
+-  TARGET_LINK_LIBRARIES ( image-display oyranos ${EXTRA_LIBS}
+-                 ${FLTK_LIBRARIES} )
+-  #INSTALL (TARGETS image-display DESTINATION bin)
+   ADD_EXECUTABLE( oyranos-config-fltk
+                   oyranos_config_fltk.cxx
+                   ../../FL/Flmm_Tabs.cxx
