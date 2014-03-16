@@ -7,12 +7,12 @@
 Summary:	Colour Management System on operating system level
 Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
 Name:		oyranos
-Version:	0.9.4
-Release:	3
+Version:	0.9.5
+Release:	1
 License:	BSD
 Group:		Applications/Graphics
 Source0:	http://downloads.sourceforge.net/oyranos/%{name}-%{version}.tar.bz2
-# Source0-md5:	582ea87d82a42912ddc45937e4f864b4
+# Source0-md5:	f59ef03182597e1e7ba0e434599eb0c4
 Patch0:		no-mesa10.patch
 URL:		http://www.oyranos.org/
 BuildRequires:	cmake >= 2.6.4
@@ -214,15 +214,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/oyranos-profile-install
 %attr(755,root,root) %{_bindir}/oyranos-profiles
 %attr(755,root,root) %{_bindir}/oyranos-xforms-modules
-%dir %{_libdir}/colour
-%dir %{_libdir}/colour/modules
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcm2_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lcms_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_lraw_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oPNG_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oicc_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyRE_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyra_cmm_module.so
+%dir %{_libdir}/color
+%dir %{_libdir}/color/modules
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_lcm2_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_lcms_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_lraw_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oPNG_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oicc_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oyRE_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oyra_cmm_module.so
 %dir %{_libdir}/oyranos
 %attr(755,root,root) %{_libdir}/oyranos/liboyranos_oyIM_cmm_module.so
 %dir %{_datadir}/color/settings
@@ -238,14 +238,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files module-cups
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_CUPS_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_CUPS_cmm_module.so
 
 %files module-x11
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/oyranos-monitor
 %attr(755,root,root) %{_bindir}/oyranos-monitor-daemon
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oyX1_cmm_module.so
-%attr(755,root,root) %{_libdir}/colour/modules/liboyranos_oydi_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oyX1_cmm_module.so
+%attr(755,root,root) %{_libdir}/color/modules/liboyranos_oydi_cmm_module.so
 /etc/xdg/autostart/oyranos-monitor-setup.desktop
 %{_mandir}/man1/oyranos-monitor.1*
 %{_mandir}/man1/oyranos-monitor-daemon.1*
