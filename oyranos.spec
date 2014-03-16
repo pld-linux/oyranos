@@ -223,7 +223,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/color/modules/liboyranos_oicc_cmm_module.so
 %attr(755,root,root) %{_libdir}/color/modules/liboyranos_oyRE_cmm_module.so
 %attr(755,root,root) %{_libdir}/color/modules/liboyranos_oyra_cmm_module.so
-%dir %{_libdir}/oyranos
 %attr(755,root,root) %{_libdir}/oyranos/liboyranos_oyIM_cmm_module.so
 %dir %{_datadir}/color/settings
 %{_datadir}/color/settings/*.policy.xml
@@ -283,6 +282,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/liboyranos_modules.so.0
 %attr(755,root,root) %{_libdir}/liboyranos_object.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/liboyranos_object.so.0
+# used by both base and -devel
+%dir %{_libdir}/oyranos
 
 %files devel
 %defattr(644,root,root,755)
