@@ -3,20 +3,20 @@
 %bcond_without	static_libs	# don't build static libraries
 %bcond_without	fltk		# FLTK GUI tools (oyranos-config-fltk)
 %bcond_without	qt		# Qt GUI tools (qscmevents)
-#
+
 Summary:	Colour Management System on operating system level
 Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
 Name:		oyranos
 Version:	0.9.5
-Release:	1
+Release:	2
 License:	BSD
 Group:		Applications/Graphics
 Source0:	http://downloads.sourceforge.net/oyranos/%{name}-%{version}.tar.bz2
 # Source0-md5:	f59ef03182597e1e7ba0e434599eb0c4
 Patch0:		no-mesa10.patch
 URL:		http://www.oyranos.org/
-BuildRequires:	cmake >= 2.6.4
 BuildRequires:	cairo-devel
+BuildRequires:	cmake >= 2.6.4
 BuildRequires:	cups-devel
 BuildRequires:	doxygen
 BuildRequires:	elektra-devel >= 0.7
@@ -170,6 +170,9 @@ Statyczne biblioteki oyranos.
 Summary:	Oyranos API documentation
 Summary(pl.UTF-8):	Dokumentacja API bibliotek Oyranos
 Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 Oyranos API documentation.
