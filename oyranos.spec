@@ -26,7 +26,7 @@ BuildRequires:	fltk-devel
 BuildRequires:	fltk-gl-devel
 %endif
 BuildRequires:	gcc >= 6:4.2
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 # not required for releases (generated code included)
 #BuildRequires:	grantlee >= 0.2.0
 BuildRequires:	lcms-devel
