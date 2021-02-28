@@ -170,9 +170,7 @@ Statyczne biblioteki oyranos.
 Summary:	Oyranos API documentation
 Summary(pl.UTF-8):	Dokumentacja API bibliotek Oyranos
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 Oyranos API documentation.
