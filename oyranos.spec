@@ -8,7 +8,7 @@ Summary:	Colour Management System on operating system level
 Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
 Name:		oyranos
 Version:	0.9.5
-Release:	9
+Release:	10
 License:	BSD
 Group:		Applications/Graphics
 Source0:	http://downloads.sourceforge.net/oyranos/%{name}-%{version}.tar.bz2
@@ -23,6 +23,7 @@ BuildRequires:	elektra-devel >= 0.7
 BuildRequires:	exiv2-devel
 %if %{with fltk}
 BuildRequires:	fltk-devel
+BuildRequires:	fltk-fluid
 BuildRequires:	fltk-gl-devel
 %endif
 BuildRequires:	gcc >= 6:4.2
