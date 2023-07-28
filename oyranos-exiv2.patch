@@ -1,0 +1,91 @@
+--- oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp.orig	2023-07-28 17:28:10.844482762 +0200
++++ oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp	2023-07-28 18:35:52.879143499 +0200
+@@ -30,6 +30,7 @@
+ 
+ #include <exiv2/image.hpp>
+ #include <exiv2/exif.hpp>
++#include <exiv2/version.hpp>
+ 
+ #include <libraw/libraw.h>
+ 
+@@ -39,6 +40,10 @@
+ #include "oyRE_help.c"
+ #include "helper.c"
+ 
++#if EXIV2_TEST_VERSION (0,28,0)
++#define AutoPtr UniquePtr
++#endif
++
+ using namespace std;
+ /* --- internal definitions --- */
+ 
+@@ -228,7 +233,11 @@ oyMessage_f oyRE_msg = 0;
+ extern oyCMMapi8_s_ _api8;
+ 
+ 
++#if EXIV2_TEST_VERSION (0,28,0)
++bool is_raw( Exiv2::ImageType id );
++#else
+ bool is_raw( int id );
++#endif
+ int DeviceFromContext(oyConfig_s **config, libraw_output_params_t *params, libraw_raw_unpack_params_t *rawparams);
+ int DeviceFromHandle_opt(oyConfig_s *device, oyOption_s *option);
+ 
+@@ -630,7 +639,7 @@ class exif2options {
+  *
+  * \todo { Untested }
+  */
+-int DeviceFromHandle(oyOptions_s **options, Exiv2::Image::AutoPtr image)
++int DeviceFromHandle(oyOptions_s **options, Exiv2::Image::AutoPtr &&image)
+ {
+    int error = 0;
+ 
+@@ -1540,7 +1549,7 @@ int DeviceFromHandle_opt(oyConfig_s *dev
+ 
+       //The std::auto_ptr::get() method returns the pointer owned by the auto_ptr
+       if (device_handle.get() && device_handle->good())
+-         DeviceFromHandle(oyConfig_GetOptions(device,"backend_core"), device_handle);
++         DeviceFromHandle(oyConfig_GetOptions(device,"backend_core"), std::move(device_handle));
+       else {
+          int level = oyMSG_WARN;
+          if(filename && strcmp( filename, "dummy" ) == 0)
+@@ -1558,10 +1567,23 @@ int DeviceFromHandle_opt(oyConfig_s *dev
+    return 0;
+ }
+ 
++#if EXIV2_TEST_VERSION (0,28,0)
++bool is_raw( Exiv2::ImageType id )
++#else
+ bool is_raw( int id )
++#endif
+ {
+    //using namespace Exiv2::ImageType;
+    switch (id) {
++#if EXIV2_TEST_VERSION (0,28,0)
++      case Exiv2::ImageType::crw:
++      case Exiv2::ImageType::tiff:
++      case Exiv2::ImageType::mrw:
++      case Exiv2::ImageType::cr2:
++      case Exiv2::ImageType::raf:
++      case Exiv2::ImageType::orf:
++      case Exiv2::ImageType::rw2:
++#else
+       case 3: //crw:
+       case 4: //tiff
+       case 5: //mrw:
+@@ -1569,10 +1591,15 @@ bool is_raw( int id )
+       case 8: //raf:
+       case 9: //orf:
+       case 16: //rw2:
++#endif
+          return true;
+          break;
+       default:
++#if EXIV2_TEST_VERSION (0,28,0)
++	 if(id == Exiv2::ImageType::none)
++#else
+          if(id == 0)
++#endif
+            return false;
+          else
+            return true;
