@@ -1,0 +1,83 @@
+--- oyranos-0.9.6/src/modules/color/modules/oyranos_cmm_elDB.c.orig	2016-12-09 11:36:53.000000000 +0100
++++ oyranos-0.9.6/src/modules/color/modules/oyranos_cmm_elDB.c	2023-08-27 11:19:27.557231171 +0200
+@@ -131,7 +131,7 @@ char *       oyGetScopeString        ( o
+ int oyGetByName(KeySet * ks, const char * key_name)
+ {
+   Key * error_key = keyNew(KEY_END);
+-  KDB * oy_handle_ = kdbOpen(error_key); oyERRopen(error_key)
++  KDB * oy_handle_ = kdbOpen(NULL, error_key); oyERRopen(error_key)
+   Key * top =  keyNew(key_name, KEY_END);
+ 
+   int rc = kdbGet(oy_handle_, ks, top); oyERR(top)
+@@ -169,7 +169,7 @@ int  oyGetKey                        ( K
+   }
+   DBG_EL1_S ( "xxxxxxxxxxxx Got %s\n", keyString(result));
+   DBG_EL_S( "keyCopy( key, result )" );
+-  keyCopy( key, result );
++  keyCopy( key, result, KEY_CP_ALL );
+ 
+   keyDel( result );
+   DBG_EL_S( "keyDel( result )" );
+@@ -181,7 +181,7 @@ int  oySetKey                        ( K
+ {
+   int rc;
+   Key * error_key = keyNew(KEY_END);
+-  KDB * oy_handle_ = kdbOpen(error_key); oyERRopen(error_key)
++  KDB * oy_handle_ = kdbOpen(NULL, error_key); oyERRopen(error_key)
+   KeySet * oy_config_ = ksNew(0, KS_END);
+   const char * key_name = keyName(key);
+   Key * parent_key = keyNew( key_name, KEY_END );
+@@ -191,7 +191,7 @@ int  oySetKey                        ( K
+   DBG_EL1_S( "kdbGet( oy_handle_, oy_config_, key ) = %d", rc );
+   if(rc >= 0)
+   {
+-    Key * dup = keyDup (key);
++    Key * dup = keyDup (key, KEY_CP_ALL);
+     //keyNeedSync(dup);
+     ksAppendKey(oy_config_, dup);
+     rc = kdbSet( oy_handle_, oy_config_, parent_key ); oyERR(key)
+@@ -359,7 +359,7 @@ oyDB_s * elDB_newFrom                ( c
+ 
+     sprintf( db->type, CMM_NICK );
+     db->error = keyNew(KEY_END);
+-    db->h = kdbOpen(db->error);
++    db->h = kdbOpen(NULL, db->error);
+     if(!db->h)
+     {
+       db->err = -1;
+@@ -598,7 +598,7 @@ int elDBSetString                    ( c
+                                        const char        * comment)
+ {
+   Key * error_key = keyNew(KEY_END);
+-  KDB * oy_handle_ = kdbOpen(error_key); oyERRopen(error_key)
++  KDB * oy_handle_ = kdbOpen(NULL, error_key); oyERRopen(error_key)
+   int rc=0,
+       max_len;
+   Key *key;
+@@ -689,7 +689,7 @@ char*    elDBSearchEmptyKeyname        (
+   KeySet * cut;
+   size_t count;
+   Key * error_key = keyNew(KEY_END);
+-  KDB * oy_handle_ = kdbOpen(error_key); oyERRopen(error_key)
++  KDB * oy_handle_ = kdbOpen(NULL, error_key); oyERRopen(error_key)
+ 
+   DBG_PROG_START
+ 
+@@ -742,7 +742,7 @@ int      elDBEraseKey                ( c
+   char * name = NULL;
+ 
+   Key * error_key = keyNew(KEY_END);
+-  KDB * oy_handle_ = kdbOpen(error_key); oyERRopen(error_key)
++  KDB * oy_handle_ = kdbOpen(NULL, error_key); oyERRopen(error_key)
+   Key * top =  keyNew(KEY_END);
+   KeySet * cut;
+ 
+@@ -798,7 +798,7 @@ oyDbAPI_s elDBopeniccDbAPI = {
+   oyOBJECT_DB_API_S,               /**< type set to oyOBJECT_DB_API_S for ABI compatibility with the actual used header version */
+   CMM_NICK,                        /**< four byte nick name of module + terminating zero */
+   CMM_VERSION,                     /**< set to module version; Major, Minor, Micro */
+-  {KDB_VERSION_MAJOR, KDB_VERSION_MINOR, KDB_VERSION_MICRO}, /**< lib_version */
++  {KDB_VERSION_MAJOR, KDB_VERSION_MINOR, KDB_VERSION_PATCH}, /**< lib_version */
+ 
+   /* newFrom */ elDB_newFrom,
+   /* release */ elDB_release,

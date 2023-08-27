@@ -1,6 +1,6 @@
---- oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp.orig	2014-03-07 09:43:25.000000000 +0100
-+++ oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp	2023-03-26 20:23:51.081151779 +0200
-@@ -229,7 +229,7 @@ extern oyCMMapi8_s_ _api8;
+--- oyranos-0.9.6/src/modules/color/modules/devices/oyranos_cmm_oyRE.cpp.orig	2016-12-09 11:36:53.000000000 +0100
++++ oyranos-0.9.6/src/modules/color/modules/devices/oyranos_cmm_oyRE.cpp	2023-08-27 10:59:35.017025049 +0200
+@@ -141,7 +141,7 @@ extern oyCMMapi8_s_ _api8;
  
  
  bool is_raw( int id );
@@ -9,16 +9,16 @@
  int DeviceFromHandle_opt(oyConfig_s *device, oyOption_s *option);
  
  /* --- implementations --- */
-@@ -1079,7 +1079,7 @@ int Configs_Modify(oyConfigs_s * devices
-             } else
-               device_context = *(libraw_output_params_t**)oyOption_GetData(context_opt, NULL, allocateFunc);
+@@ -1009,7 +1009,7 @@ int Configs_Modify(oyConfigs_s * devices
  
--            DeviceFromContext(&device_new, device_context);
-+            DeviceFromContext(&device_new, device_context, &rip.imgdata.rawparams);
+             oyOptions_FindInt( options, "icc_profile_flags", 0, &icc_profile_flags );
+ 
+-            DeviceFromContext(&device, device_context);
++            DeviceFromContext(&device, device_context, &rip.imgdata.rawparams);
              if(oyOptions_FindString( options, "icc_profile.fallback", 0 ))
                /* fallback: try to get color matrix to build a profile */
-               p = createMatrixProfile( rip.imgdata.color,
-@@ -1445,6 +1445,10 @@ oyCMMinfo_s_ _cmm_module = {
+               p = createMatrixProfile( rip.imgdata.color, icc_profile_flags,
+@@ -1393,6 +1393,10 @@ oyCMM_s _cmm_module = {
          error = oyOptions_SetFromInt( oyConfig_GetOptions(*config,"backend_core"), \
                                        CMM_BASE_REG OY_SLASH PRFX_LRAW #name, \
                                        params->name, 0, OY_CREATE_NEW );
@@ -29,7 +29,7 @@
  #define DFC_OPT_ADD_FLOAT_ARR(name, i, n) if(!error) { \
  if (i==n-1) { \
     oyOption_s *opt = oyOption_FromRegistration(CMM_BASE_REG OY_SLASH PRFX_LRAW #name, 0);\
-@@ -1459,7 +1463,7 @@ if (i==n-1) { \
+@@ -1407,7 +1411,7 @@ if (i==n-1) { \
          oyOption_SetFromDouble(opt, params->name, 0, 0); \
          oyOptions_MoveIn(*oyConfig_GetOptions(*config,"backend_core"), &opt, -1); \
  }
@@ -38,7 +38,7 @@
  {
     int error = 0;
  
-@@ -1499,7 +1503,7 @@ int DeviceFromContext(oyConfig_s **confi
+@@ -1447,7 +1451,7 @@ int DeviceFromContext(oyConfig_s **confi
     DFC_OPT_ADD_INT_ARR(greybox,1) //4
     DFC_OPT_ADD_INT_ARR(greybox,2) //4
     DFC_OPT_ADD_INT_ARR(greybox,3) //4

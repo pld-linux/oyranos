@@ -1,5 +1,5 @@
---- oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp.orig	2023-07-28 17:28:10.844482762 +0200
-+++ oyranos-0.9.5/src/modules/devices/oyranos_cmm_oyRE.cpp	2023-07-28 18:35:52.879143499 +0200
+--- oyranos-0.9.6/src/modules/color/modules/devices/oyranos_cmm_oyRE.cpp.orig	2023-07-28 17:28:10.844482762 +0200
++++ oyranos-0.9.6/src/modules/color/modules/devices/oyranos_cmm_oyRE.cpp	2023-07-28 18:35:52.879143499 +0200
 @@ -30,6 +30,7 @@
  
  #include <exiv2/image.hpp>

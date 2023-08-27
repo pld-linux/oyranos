@@ -1,0 +1,27 @@
+Workaround qt5 vs X11 headers conflict (Qt uses None as an enum value, X11 as a macro)
+--- oyranos-0.9.6/src/tools/qcmsevents/qcmsevents.cpp.orig	2016-12-09 11:36:53.000000000 +0100
++++ oyranos-0.9.6/src/tools/qcmsevents/qcmsevents.cpp	2023-08-27 12:18:59.341214508 +0200
+@@ -7,6 +7,11 @@
+  *
+  */
+ 
++#include <QAction>
++#include <QActionGroup>
++#include <QVBoxLayout>
++#include <QMenu>
++
+ #include <cstdio>
+ 
+ #define TARGET "X Color Management Events"
+@@ -20,11 +25,6 @@
+ 
+ #include <X11/Xcm/Xcm.h>
+ 
+-#include <QAction>
+-#include <QActionGroup>
+-#include <QVBoxLayout>
+-#include <QMenu>
+-
+ QcmseDialog * dialog = NULL;
+ 
+ QcmseDialog::QcmseDialog()
