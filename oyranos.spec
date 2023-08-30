@@ -1,6 +1,3 @@
-# TODO:
-# - Xcalib: http://www.etg.e-technik.uni-erlangen.de/web/doe/xcalib/
-# - libOpenICC: https://github.com/OpenICC/config
 #
 # Conditional build:
 %bcond_without	static_libs	# static libraries
@@ -25,6 +22,7 @@ Patch4:		%{name}-qt.patch
 # not working currently (Aug 2023)
 #URL:		http://www.oyranos.org/
 URL:		https://github.com/oyranos-cms/oyranos
+BuildRequires:	OpenICC-devel
 BuildRequires:	cairo-devel
 BuildRequires:	cmake >= 2.6.4
 BuildRequires:	cups-devel
@@ -116,6 +114,7 @@ Summary:	X11 and monitor support for Oyranos Colour Management System
 Summary(pl.UTF-8):	Obsługa X11 i monitorów dla systemu zarządzania kolorami Oyranos
 Group:		X11/Applications/Graphics
 Requires:	%{name} = %{version}-%{release}
+Requires:	xcalib
 
 %description module-x11
 X11 and monitor support for Oyranos Colour Management System.
