@@ -211,11 +211,11 @@ Dokumentacja API bibliotek Oyranos.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
 
 # no reason to package also qt4 variant; qt5 one is enough
 %{__sed} -i -e '/ADD_SUBDIRECTORY( qt4 )/d' src/tools/qcmsevents/CMakeLists.txt
