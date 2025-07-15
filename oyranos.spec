@@ -8,7 +8,7 @@ Summary:	Colour Management System on operating system level
 Summary(pl.UTF-8):	System zarządzania kolorami na poziomie systemu operacyjnego
 Name:		oyranos
 Version:	0.9.6
-Release:	1
+Release:	2
 License:	BSD
 Group:		Applications/Graphics
 #Source0Download: https://github.com/oyranos-cms/oyranos/releases
