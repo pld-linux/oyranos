@@ -19,6 +19,7 @@ Patch1:		%{name}-libraw.patch
 Patch2:		%{name}-exiv2.patch
 Patch3:		%{name}-elektra.patch
 Patch4:		%{name}-qt.patch
+Patch5:		build.patch
 # not working currently (Aug 2023)
 #URL:		http://www.oyranos.org/
 URL:		https://github.com/oyranos-cms/oyranos
@@ -216,6 +217,7 @@ Dokumentacja API bibliotek Oyranos.
 %patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
+%patch -P5 -p1
 
 # no reason to package also qt4 variant; qt5 one is enough
 %{__sed} -i -e '/ADD_SUBDIRECTORY( qt4 )/d' src/tools/qcmsevents/CMakeLists.txt

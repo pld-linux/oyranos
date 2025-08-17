@@ -1,0 +1,11 @@
+--- oyranos-0.9.6/src/modules/color/modules/oyranos_cmm_oPNG.c~	2016-12-09 11:36:53.000000000 +0100
++++ oyranos-0.9.6/src/modules/color/modules/oyranos_cmm_oPNG.c	2025-08-17 17:52:37.550980156 +0200
+@@ -882,7 +882,7 @@ oyImage_s *  oyImage_FromPNG         ( c
+   {
+ #if defined(PNG_iCCP_SUPPORTED)
+     png_charp name = 0;
+-    png_charp profile = 0;
++    png_bytep profile = 0;
+     png_uint_32 proflen = 0;
+     int compression = 0;
+ 
